@@ -6,6 +6,6 @@
   },
   "dependencies": {
     "dotenv": "^6.0.0",
-    "express": "3.4.8"
+    "express": "4.17.1"
   }
 }
