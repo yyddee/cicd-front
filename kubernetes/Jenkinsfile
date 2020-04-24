@@ -1,6 +1,12 @@
 def label = "worker-${UUID.randomUUID().toString()}"
 
 // Slack 알림
+def notifySlack(STATUS, COLOR) {
+slackSend channel: '#cloud-academy',
+message: STATUS+" : " + "${env.JOB_NAME}[${env.BUILD_NUMBER}] (${env.BUILD_URL})",
+color: COLOR,
+tokenCredentialId: 'YLRyfhgd6fPY1G0NvS29fGtm',
+teamDomain: 'jenkinstestslackhq' }
 
 podTemplate(label: label, containers: [
 // #0 필요한 Pod생성
@@ -13,11 +19,10 @@ containerTemplate(name: 'docker', image: 'docker:dind', command: 'dockerd --host
 containerTemplate(name: 'kubectl', image: 'roffe/kubectl', command: 'cat', ttyEnabled: true)
 ]) {
   node(label) {
-
 	// 예외처리 구문
 	try {
 		// Slack - 빌드 시작시
-
+notifySlack("STARTED", "#0000FF")
 		// #1 Github 소스 가져오기
     stage('Get Source') {     git credentialsId: 'github-lab03', url: 'https://github.com/yyddee/cicd-front', branch: 'master' }
 		// #2 Properties 파일 읽기
@@ -37,7 +42,6 @@ containerTemplate(name: 'kubectl', image: 'roffe/kubectl', command: 'cat', ttyEn
 		def timeStamp = System.currentTimeMillis()
 		echo "TimeStamp: ${timeStamp}"
 		tag = tag+"-"+timeStamp
-
 		// #3 빌드 Stage
     stage('Build') {     container('npm') {         sh "npm install"     } }
 		// #4 Sonarqube 정적분석 Stage
@@ -62,11 +66,10 @@ containerTemplate(name: 'kubectl', image: 'roffe/kubectl', command: 'cat', ttyEn
     sh "kubectl apply -n ${namespace} -f ${service}"
     sh "kubectl get svc -n ${namespace}"      } }
 		// Slack - 빌드 성공시
-
-
+notifySlack("SUCCESS", "#00FF00")
 	} catch(e) {
 		// Slack - 빌드 실패시
-
+notifySlack("FAILED", "#FF0000")
 	}
   }
 }
