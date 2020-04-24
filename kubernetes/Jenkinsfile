@@ -22,7 +22,8 @@ containerTemplate(name: 'kubectl', image: 'roffe/kubectl', command: 'cat', ttyEn
     stage('Get Source') {     git credentialsId: 'github-lab03', url: 'https://github.com/yyddee/cicd-front', branch: 'master' }
 		// #2 Properties 파일 읽기
     def props = readProperties file:"./kubernetes/pipeline.properties"
-    def tag = props["version"] def dockerRegistry = props["dockerRegistry"]
+    def tag = props["version"]
+    def dockerRegistry = props["dockerRegistry"]
     def credentialRegistry=props["credentialRegistry"]
     def image = props["image"]
     def appname = props["appname"]
