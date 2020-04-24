@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: frontend-lab03
-          image: deyong/frontend-lab03
+          image: deyong2/frontend-lab03
           imagePullPolicy: Always
           ports:
             - containerPort: 3000

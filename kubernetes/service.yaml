@@ -10,5 +10,5 @@ spec:
       targetPort: 3000
       protocol: TCP
   selector:
-    app:frontend-lab03
+    app: frontend-lab03
   type: NodePort
