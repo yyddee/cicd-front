@@ -41,11 +41,23 @@ containerTemplate(name: 'kubectl', image: 'roffe/kubectl', command: 'cat', ttyEn
 		// #3 빌드 Stage
     stage('Build') {     container('npm') {         sh "npm install"     } }
 		// #4 Sonarqube 정적분석 Stage
-    stage('Static Code Analysis') {  container('scanner') {    sh "sonar-scanner \    -Dsonar.projectName=${sonarQubeProject} \     -Dsonar.host.url=${sonarQubeURL} \     -Dsonar.projectBaseDir=./”  } }
+    stage('Static Code Analysis') {
+    container('scanner') {
+    sh "sonar-scanner \
+    -Dsonar.projectName=${sonarQubeProject} \
+    -Dsonar.host.url=${sonarQubeURL} \
+    -Dsonar.projectBaseDir=./”  } }
 		// #5 컨테이너 이미지 생성 Stage
-    stage('Dockerizing') {     container('docker') {         docker.withRegistry("${dockerRegistry}", "${credentialRegistry}") {             sh "docker build -f ./Dockerfile -t ${image}:${tag} ${WORKSPACE}"              sh "docker push ${image}:${tag}"             sh "docker tag ${image}:${tag} ${image}:latest"             sh "docker push ${image}:latest"         }     } }
+    stage('Dockerizing') {
+    container('docker') {
+    docker.withRegistry("${dockerRegistry}", "${credentialRegistry}") {
+    sh "docker build -f ./Dockerfile -t ${image}:${tag} ${WORKSPACE}"
+    sh "docker push ${image}:${tag}"
+    sh "docker tag ${image}:${tag} ${image}:latest"
+    sh "docker push ${image}:latest"         }     } }
 		// #6 배포 Stage
-    stage('Deploy') {     container('kubectl') {
+    stage('Deploy') {
+    container('kubectl') {
     sh "kubectl apply -n ${namespace} -f ${deployment}"
     sh "kubectl apply -n ${namespace} -f ${service}"
     sh "kubectl get svc -n devops"      } }
