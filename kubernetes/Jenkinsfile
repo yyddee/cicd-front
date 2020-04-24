@@ -5,7 +5,7 @@ def notifySlack(STATUS, COLOR) {
 slackSend channel: '#cloud-academy',
 message: STATUS+" : " + "${env.JOB_NAME}[${env.BUILD_NUMBER}] (${env.BUILD_URL})",
 color: COLOR,
-tokenCredentialId: 'YLRyfhgd6fPY1G0NvS29fGtm',
+tokenCredentialId: 'slack-lab03',
 teamDomain: 'jenkinstestslackhq' }
 
 podTemplate(label: label, containers: [
