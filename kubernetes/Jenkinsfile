@@ -60,7 +60,7 @@ containerTemplate(name: 'kubectl', image: 'roffe/kubectl', command: 'cat', ttyEn
     container('kubectl') {
     sh "kubectl apply -n ${namespace} -f ${deployment}"
     sh "kubectl apply -n ${namespace} -f ${service}"
-    sh "kubectl get svc -n lab03"      } }
+    sh "kubectl get svc -n ${namespace}"      } }
 		// Slack - 빌드 성공시
 
 
