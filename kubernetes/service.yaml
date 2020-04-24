@@ -1,14 +1,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: 
+  name: fontend-lab03
   labels:
-    name: 
+    name: frontend-lab03
 spec:
   ports:
     - port: 3000
       targetPort: 3000
       protocol: TCP
   selector:
-    app: 
+    app:frontend-lab03
   type: NodePort
